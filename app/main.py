@@ -29,5 +29,5 @@ else:
 # Create and display embeddings
 if data != "":
     st.header("Create Embeddings")
-    embeds = create_embeddings(data)
+    embeds = create_embeddings(data, st.secrets["OPENAI_API_KEY"])
     st.markdown(embeds)

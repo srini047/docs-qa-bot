@@ -8,7 +8,7 @@
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 
-def create_embeddings(text):
+def create_embeddings(text, OPENAI_API_KEY):
     text_splitter = CharacterTextSplitter(        
         separator = "\n\n",
         chunk_size = 1000,
@@ -18,6 +18,11 @@ def create_embeddings(text):
 
     texts = text_splitter.create_documents([text])
 
-    embeddings = OpenAIEmbeddings(openai_api_key="")
-    query_result = embeddings.embed_query(texts)
-    return query_result
+    embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+    embeddings_query_result = []
+
+    for i in range(len(texts)):
+        query_result = embeddings.embed_query(texts[i].page_content)
+        embeddings_query_result = embeddings_query_result + query_result
+
+    return embeddings_query_result
