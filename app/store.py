@@ -1,12 +1,13 @@
 # Create a new weaviate vector database and store the result of the generated embeddings
 
 import weaviate
+import streamlit as st
 
 def store_embeddings(embeddings):
     client = weaviate.Client(
-        url="https://dev-docs-qa-bot-72hr7pq4.weaviate.network",
+        url=st.secrets["WEAVIATE_CLUSTER_URL"],
         auth_client_secret=weaviate.AuthApiKey(
-            api_key="7Ue7892SsmmcncqN2CZIHOgB5lkTclJhbgGY"
+            api_key=st.secrets["WEAVIATE_AUTH_KEY"]
         ),
     )
 

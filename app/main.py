@@ -33,7 +33,7 @@ else:
 if data != "":
     st.header("Create Embeddings")
     embeds = create_embeddings(
-        data, "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"
+        data, st.secrets["OPENAI_API_KEY"]
     )
     st.text("Created successfully...")
 
