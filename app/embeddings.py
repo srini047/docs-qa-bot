@@ -5,6 +5,7 @@
 ## - Then create documents of every chunk
 ## - Finally create embeddings using the Hugging Face embedding class
 
+import pandas as pd
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 
@@ -25,4 +26,7 @@ def create_embeddings(text, OPENAI_API_KEY):
         query_result = embeddings.embed_query(texts[i].page_content)
         embeddings_query_result = embeddings_query_result + query_result
 
-    return embeddings_query_result
+    embeddings = pd.DataFrame(embeddings_query_result)
+    embeddings.columns = ["embedded_values"]
+    
+    return embeddings
