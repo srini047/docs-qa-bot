@@ -18,15 +18,7 @@ def create_embeddings(text, OPENAI_API_KEY):
     )
 
     texts = text_splitter.create_documents([text])
-
     embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-    embeddings_query_result = []
 
-    for i in range(len(texts)):
-        query_result = embeddings.embed_query(texts[i].page_content)
-        embeddings_query_result = embeddings_query_result + query_result
+    return texts, embeddings
 
-    embeddings = pd.DataFrame(embeddings_query_result)
-    embeddings.columns = ["embedded_values"]
-    
-    return embeddings
