@@ -6,9 +6,9 @@ import streamlit as st
 def store_embeddings(embeddings):
     client = weaviate.Client(
         url=st.secrets["WEAVIATE_CLUSTER_URL"],
-        auth_client_secret=weaviate.AuthApiKey(
-            api_key=st.secrets["WEAVIATE_AUTH_KEY"]
-        ),
+        # auth_client_secret=weaviate.AuthApiKey(
+        #     api_key=st.secrets["WEAVIATE_AUTH_KEY"]
+        # ),
     )
 
     # Uncomment if you want to improve update the data stored

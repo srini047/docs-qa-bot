@@ -26,7 +26,7 @@ def create_embeddings(text, OPENAI_API_KEY):
         query_result = embeddings.embed_query(texts[i].page_content)
         embeddings_query_result = embeddings_query_result + query_result
 
-    embeddings = pd.DataFrame(embeddings_query_result)
-    embeddings.columns = ["embedded_values"]
+    embeddings_df = pd.DataFrame(embeddings_query_result)
+    embeddings_df.columns = ["embedded_values"]
     
-    return embeddings
+    return texts, embeddings, embeddings_df
