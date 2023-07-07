@@ -3,6 +3,7 @@
 import weaviate
 import streamlit as st
 
+@st.cache_data
 def store_embeddings(embeddings):
     client = weaviate.Client(
         url=st.secrets["WEAVIATE_CLUSTER_URL"],

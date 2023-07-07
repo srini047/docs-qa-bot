@@ -8,10 +8,12 @@
 import pandas as pd
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
+import streamlit as st
 
+@st.cache_data
 def create_embeddings(text, OPENAI_API_KEY):
     text_splitter = CharacterTextSplitter(        
-        separator = "\n\n",
+        separator = "\n",
         chunk_size = 1000,
         chunk_overlap  = 200,
         length_function = len,

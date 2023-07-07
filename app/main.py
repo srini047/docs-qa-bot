@@ -2,18 +2,35 @@
 import streamlit as st
 from streamlit_chat import message
 import time
+from PyPDF2 import PdfReader
 
 # Internal file imports
-from extract import extract_text
+# from extract import extract_text
 from embeddings import create_embeddings
 from store import store_embeddings
 from qa import search_qa
+from chat import chat_with_pdf
 
 # Start of streamlit application
 st.title("PDF QA Bot using Langchain")
 
-## Intitialization
-data = ""
+# Intitialization
+@st.cache_data
+def extract_text(_file):
+    """
+        :param file: the PDF file to extract
+    """
+    content = ""
+    reader = PdfReader(_file)
+    number_of_pages = len(reader.pages)
+
+    # Scrape text from multiple pages
+    for i in range(number_of_pages):
+        page = reader.pages[i]
+        text = page.extract_text()
+        content = content + text
+
+    return content
 
 st.header("File upload")
 file = st.file_uploader("Choose a file (PDF)", type="pdf", help="file to be parsed")
@@ -23,16 +40,13 @@ if file is not None:
         time.sleep(5)
     st.success("Done!")
 
+    # @st.cache_data
     data = extract_text(file)
-    st.text(data, help="Extracted text from uploaded pdf")
+    # st.text(data, help="Extracted text from uploaded pdf")
 
-else:
-    st.error("Upload the file to proceed further", icon="🚨")
-
-# Create, display, search and query the embeddings
-if data != "":
+    # Create, display, search and query the embeddings
     st.header("Create Embeddings")
-    texts, embeds, embeds_df = create_embeddings(
+    texts, embeddings, embeds_df = create_embeddings(
         data, st.secrets["OPENAI_API_KEY"]
     )
     st.text("Created successfully...")
@@ -42,33 +56,54 @@ if data != "":
     else:
         st.error("Operation not successful. Please reach out to support...", icon="❌")
 
-    prompt = st.text_input("Enter your query to retrieve answer from my knowledge...")
-    if(prompt):
-        st.text(search_qa(texts, embeds, prompt))
+else:
+    st.error("Upload the file to proceed further", icon="🚨")
+
+# Create, display, search and query the embeddings
+# st.header("Create Embeddings")
+# texts, embeddings, embeds_df = create_embeddings(
+#     data, st.secrets["OPENAI_API_KEY"]
+# )
+# st.text("Created successfully...")
+
+# if store_embeddings(embeds_df):
+#     st.success("Data saved successfully...", icon="✅")
+# else:
+#     st.error("Operation not successful. Please reach out to support...", icon="❌")
+
+# st.header("Ask QA to your PDF...")
+# prompt = st.text_input("Enter your query to retrieve answer from my knowledge...")
+# if(prompt):
+#     st.text(search_qa(texts, embeddings, prompt))
+#     st.text('Works...')
+# st.header("Ask QA to your PDF...")
+# prompt = st.text_input("Enter some text", "")
+# response = search_qa(texts, embeddings, prompt)
+# st.write("Answer:", response)
 
 # Chat component to chat with your uploaded PDF
-# st.header("Chat with your PDF...")
-# if 'generated' not in st.session_state:
-#     st.session_state['generated'] = []
+st.header("Chat with your PDF...")
+if 'generated' not in st.session_state:
+    st.session_state['generated'] = []
 
-# if 'past' not in st.session_state:
-#     st.session_state['past'] = []
+if 'past' not in st.session_state:
+    st.session_state['past'] = []
 
-# def get_text():
-#     input_text = st.chat_input("Enter your query to retrieve answer from my knowledge...")
-#     return input_text
+def get_text():
+    input_text = st.chat_input("Enter your query to retrieve answer from my knowledge...")
+    return input_text
 
-# user_input = get_text()
+user_input = get_text()
 
-# if user_input:
-#     output = "Random output generated for now..."
+if user_input:
+    output = chat_with_pdf(data, embeddings, user_input)
 
-#     st.session_state.past.append(user_input)
-#     st.session_state.generated.append(output)
+    st.session_state.past.append(user_input)
+    st.session_state.generated.append(output)
 
-# if st.session_state['generated']:
+if st.session_state['generated']:
 
-#     for i in range(len(st.session_state['generated'])-1, -1, -1):
-#         message(st.session_state["generated"][i], key=str(i))
-#         message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+    for i in range(len(st.session_state['generated'])-1, -1, -1):
+        message(st.session_state["generated"][i], key=str(i))
+        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
 

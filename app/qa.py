@@ -3,11 +3,12 @@
 from langchain.vectorstores import Weaviate
 # from langchain import OpenAI
 import streamlit as st
-# from langchain.retrievers.weaviate_hybrid_search import WeaviateHybridSearchRetriever
 
-def search_qa(texts, embeds, prompt):
-    db = Weaviate.from_documents(texts, embeds, weaviate_url=st.secrets["WEAVIATE_CLUSTER_URL"], by_text=False)
-
-    docs = db.similarity_search(prompt)
-
-    return docs[0]
+@st.cache_data
+def search_qa(_texts, _embeds, prompt):
+    query = prompt
+    db = Weaviate.from_documents(_texts, _embeds, weaviate_url="https://dev-docs-qa-bot-cc7alj49.weaviate.network", by_text=False)
+    docs = db.similarity_search(query)
+    print(docs[0].page_content)
+    
+    return docs[0].page_content
