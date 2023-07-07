@@ -1,4 +1,5 @@
-# Docs QA Bot
+# Docs QA Bot🤖
+![Docs QA Bot Thumbnail](https://user-images.githubusercontent.com/81156510/251808915-1f5b357c-03e7-4c8b-894d-603fdc3d9ecc.png)
 A streamlit app that enables users to interact with the uploaded PDF. You can ask questions or doubts regarding the PDF and our Chatbot would answer them with a friendly response.
 
 ## Tech stack
