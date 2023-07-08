@@ -1,7 +1,7 @@
 from PyPDF2 import PdfReader
 import streamlit as st
 
-@st.cache_data
+@st.cache_data()
 def extract_text(_file):
     """
         :param file: the PDF file to extract
