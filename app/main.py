@@ -5,7 +5,7 @@ import time
 from PyPDF2 import PdfReader
 
 # Internal file imports
-# from extract import extract_text
+from extract import extract_text
 from embeddings import create_embeddings
 from store import store_embeddings
 from qa import search_qa
@@ -15,23 +15,6 @@ from chat import chat_with_pdf
 st.title("PDF QA Bot using Langchain")
 
 # Intitialization
-@st.cache_data
-def extract_text(_file):
-    """
-        :param file: the PDF file to extract
-    """
-    content = ""
-    reader = PdfReader(_file)
-    number_of_pages = len(reader.pages)
-
-    # Scrape text from multiple pages
-    for i in range(number_of_pages):
-        page = reader.pages[i]
-        text = page.extract_text()
-        content = content + text
-
-    return content
-
 st.header("File upload")
 file = st.file_uploader("Choose a file (PDF)", type="pdf", help="file to be parsed")
 

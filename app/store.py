@@ -12,18 +12,16 @@ def store_embeddings(embeddings):
         # ),
     )
 
-    # Uncomment if you want to improve update the data stored
-    # client.schema.delete_class("PDFQA")
     try:
         client.schema.delete_all()
-        print("Deleted class deleted PDFQA...")
+        print("Schema deleted successfully...")
     except:
         print("Schema not deleted...")
 
     schema = {
         "classes": [
             {
-                "class": "PDFQA",
+                "class": "PDF",
                 "moduleConfig": {
                     "text2vec-transformers": {
                         "skip": False,
