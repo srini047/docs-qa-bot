@@ -19,10 +19,6 @@ st.header("File upload")
 file = st.file_uploader("Choose a file (PDF)", type="pdf", help="file to be parsed")
 
 if file is not None:
-    with st.spinner("Scraping text from PDF. Please be patient..."):
-        time.sleep(5)
-    st.success("Done!")
-
     # @st.cache_data
     data = extract_text(file)
     # st.text(data, help="Extracted text from uploaded pdf")
