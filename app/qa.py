@@ -7,7 +7,7 @@ import streamlit as st
 @st.cache_data
 def search_qa(_texts, _embeds, prompt):
     query = prompt
-    db = Weaviate.from_documents(_texts, _embeds, weaviate_url="https://dev-docs-qa-bot-cc7alj49.weaviate.network", by_text=False)
+    db = Weaviate.from_documents(_texts, _embeds, weaviate_url=st.secrets["WEAVIATE_CLUSTER_URL"], by_text=False)
     docs = db.similarity_search(query)
     print(docs[0].page_content)
     
